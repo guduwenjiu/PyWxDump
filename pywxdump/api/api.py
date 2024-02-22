@@ -339,7 +339,7 @@ def get_img():
 
     if os.path.exists(img_path_all):
         fomt, md5, out_bytes = read_img_dat(img_path_all)
-        imgsavepath = os.path.join(img_tmp_path, img_path+"_"+".".join([md5, fomt]))
+        imgsavepath = os.path.join(img_tmp_path, img_path + "_" + ".".join([md5, fomt]))
         if not os.path.exists(os.path.dirname(imgsavepath)):
             os.makedirs(os.path.dirname(imgsavepath))
         with open(imgsavepath, "wb") as f:
@@ -572,6 +572,35 @@ def merge():
 
 
 # END 这部分为专业工具的api
+
+# 关于、帮助、设置
+@api.route('/api/check_update', methods=["GET", 'POST'])
+@error9999
+def check_update():
+    """
+    检查更新
+    :return:
+    """
+    url = "https://api.github.com/repos/xaoyaoo/PyWxDump/tags"
+    try:
+        import requests
+        res = requests.get(url)
+        if res.status_code == 200:
+            data = res.json()
+            NEW_VERSION = data[0].get("name")
+            if NEW_VERSION[1:] != pywxdump.__version__:
+                msg = "有新版本"
+            else:
+                msg = "已经是最新版本"
+            return ReJson(0, body={"msg": msg, "latest_version": NEW_VERSION,
+                                   "latest_url": "https://github.com/xaoyaoo/PyWxDump/releases/tag/" + NEW_VERSION})
+        else:
+            return ReJson(2001, body="status_code is not 200")
+    except Exception as e:
+        return ReJson(9999, msg=str(e))
+
+
+# END 关于、帮助、设置
 
 
 @api.route('/')
