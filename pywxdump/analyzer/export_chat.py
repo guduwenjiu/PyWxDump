@@ -227,15 +227,22 @@ def get_msg_list(MSG_db_path, selected_talker="", start_index=0, page_size=500):
             if cdnurl:
                 content = {"src": cdnurl, "msg": "表情"}
 
-        elif type_id[0] == 49:
+        elif type_id == (49, 0):
+            BytesExtra = read_BytesExtra(BytesExtra)
+            url = match_BytesExtra(BytesExtra)
+            content["src"] = url
+            file_name = os.path.basename(url)
+            content["msg"] = file_name
+
+
+        elif type_id[0] == 49 and type_id[1] != 0:
             BytesExtra = read_BytesExtra(BytesExtra)
             url = match_BytesExtra(BytesExtra)
             content["src"] = url
             content["msg"] = type_name
 
         elif type_id == (50, 0):  # 语音通话
-            content_tmp = parse_xml_string(StrContent)
-            content["msg"] = "语音/视频通话[%s]" % content_tmp.get("VoIPBubbleMsg", {}).get("msg", "")
+            content["msg"] = "语音/视频通话[%s]" % DisplayContent
 
         # elif type_id == (10000, 0):
         #     content["msg"] = StrContent
@@ -281,6 +288,18 @@ def get_chat_count(MSG_db_path: [str, list], username: str = ""):
     for row in result:
         username, chat_count = row
         chat_counts[username] = chat_count
+    return chat_counts
+
+def get_all_chat_count(MSG_db_path: [str, list]):
+    """
+    获取聊天记录总数量
+    :param MSG_db_path: MSG.db 文件路径
+    :return: 聊天记录数量
+    """
+    sql = f"SELECT COUNT(*) FROM MSG;"
+    db1 = sqlite3.connect(MSG_db_path)
+    result = execute_sql(db1, sql)
+    chat_counts = result[0][0]
     return chat_counts
 
 
