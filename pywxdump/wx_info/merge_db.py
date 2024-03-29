@@ -6,8 +6,10 @@
 # Date:         2023/12/03
 # -------------------------------------------------------------------------------
 import os
+import random
 import shutil
 import sqlite3
+import subprocess
 import time
 
 
@@ -275,6 +277,7 @@ def merge_db(db_paths, save_path="merge.db", CreateTime: int = 0, endCreateTime:
             sql = f"INSERT OR IGNORE INTO {table} ({','.join([i[0] for i in col_type])}) VALUES ({','.join(['?'] * len(columns))})"
             out_cursor.executemany(sql, src_data)
             outdb.commit()
+        db.close()
     outdb.close()
     return save_path
 
@@ -301,7 +304,7 @@ def decrypt_merge(wx_path, key, outpath="", CreateTime: int = 0, endCreateTime: 
     my_wxid = os.path.basename(wx_path)
 
     # 解密
-    code, wxdbpaths = get_core_db(wx_path, ["MSG", "MediaMSG", "MicroMsg"])
+    code, wxdbpaths = get_core_db(wx_path, ["MSG", "MediaMSG", "MicroMsg", "OpenIMContact", "OpenIMMedia", "OpenIMMsg"])
 
     # 判断out_path是否为空目录
     if os.path.exists(decrypted_path) and os.listdir(decrypted_path):
@@ -324,7 +327,8 @@ def decrypt_merge(wx_path, key, outpath="", CreateTime: int = 0, endCreateTime: 
         if code1:
             out_dbs.append(ret1[1])
 
-    parpare_merge_db_path = [i for i in out_dbs if "de_MicroMsg" in i or "de_MediaMSG" in i or "de_MSG" in i]
+    parpare_merge_db_path = [i for i in out_dbs if
+                             "de_MicroMsg" in i or "de_MediaMSG" in i or "de_MSG" in i or "de_OpenIMMsg" in i or "de_OpenIMMedia" in i or "de_OpenIMContact" in i]
 
     merge_save_path = merge_db(parpare_merge_db_path, merge_save_path, CreateTime=CreateTime,
                                endCreateTime=endCreateTime)
@@ -350,12 +354,16 @@ def merge_real_time_db(key, db_path: str, merge_path: str, CreateTime: int = 0, 
     if platform.architecture()[0] != '64bit':
         raise Exception("System is not 64-bit.")
 
-
     if not os.path.exists(db_path):
         raise FileNotFoundError("数据库不存在")
 
-    out_path = "tmp_real_time.db"
+    if "MSG" not in db_path and "MicroMsg" not in db_path and "MediaMSG" not in db_path:
+        raise FileNotFoundError("数据库不是消息数据库")  # MicroMsg实时数据库
 
+    out_path = "tmp_" + ''.join(
+        random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=6)) + ".db"
+    merge_path_base = os.path.dirname(merge_path)  # 合并后的数据库路径
+    out_path = os.path.join(merge_path_base, out_path)
     if os.path.exists(out_path):
         os.remove(out_path)
 
@@ -366,13 +374,19 @@ def merge_real_time_db(key, db_path: str, merge_path: str, CreateTime: int = 0, 
 
     # 调用cmd命令
     cmd = f"{real_time_exe_path} \"{key}\" \"{db_path}\" \"{out_path}\" {CreateTime} {endCreateTime}"
-    os.system(cmd)
+    # os.system(cmd)
+    p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         creationflags=subprocess.CREATE_NO_WINDOW)
+    p.communicate()
 
     if not os.path.exists(out_path):
         raise FileNotFoundError("合并失败")
 
     a = merge_db([out_path], merge_path, CreateTime=CreateTime, endCreateTime=endCreateTime)
-
-    os.remove(out_path)
+    try:
+        os.remove(out_path)
+    except:
+        time.sleep(3)
+        os.remove(out_path)
 
     return merge_path

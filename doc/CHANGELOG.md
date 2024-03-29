@@ -1,6 +1,59 @@
-## v2.4.47.(待发布)
+## v2.4.62.(待发布)
 
-- 
+- UPDATE CHANGELOG.md
+
+## v2.4.61
+
+- fix
+- UPDATE DOC
+- fix and add
+- 解密并合并 OpenIM*
+- OpenIM* 增加 #86
+- UPDATE README.md
+- 优化 decryption.py
+- UPDATE CHANGELOG.md
+- 数据库连接方式改为共用连接，降低时间开销
+- (backup/master) 添加编码# -*- coding:utf-8 -*-
+
+## v2.4.60
+
+- fix
+- 系统通知，显示为系统发送
+- subprocess 隐藏调用过程
+
+## v2.4.59
+
+- 修复无法打开聊天查看
+
+## v2.4.58
+
+- fix 群聊图片发送者显示为未知
+- UPDATE CHANGELOG.md
+
+## v2.4.57
+
+- fix AND MicroMsg实时数据库 #82
+
+## v2.4.56
+
+- fix
+
+## v2.4.55
+
+- fix
+- 转账显示具体金额
+- 合并转发的聊天记录 #84
+- UPDATE CHANGELOG.md
+
+## v2.4.54
+
+- fix
+- fix 高频使用
+
+## v2.4.50
+
+- 误删2.4.46，重新发布
+- UPDATE CHANGELOG.md
 
 ## v2.4.46
 
