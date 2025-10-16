@@ -6,8 +6,9 @@
 # Date:         2023/10/14
 # -------------------------------------------------------------------------------
 import argparse
+import os
 import sys
-import time
+import json
 
 from pywxdump import *
 import pywxdump
@@ -106,7 +107,7 @@ class MainBiasAddr(BaseSubMainClass):
         parser.add_argument("--account", type=str, help="微信账号", metavar="", required=True)
         parser.add_argument("--key", type=str, metavar="", help="(可选)密钥")
         parser.add_argument("--db_path", type=str, metavar="", help="(可选)已登录账号的微信文件夹路径")
-        parser.add_argument("-vlp", '--version_list_path', type=str, metavar="",
+        parser.add_argument("-vlp", '--WX_OFFS_PATH', type=str, metavar="",
                             help="(可选)微信版本偏移文件路径,如有，则自动更新",
                             default=None)
 
@@ -120,7 +121,7 @@ class MainBiasAddr(BaseSubMainClass):
         account = args.account
         key = args.key
         db_path = args.db_path
-        vlp = args.version_list_path
+        vlp = args.WX_OFFS_PATH
         # 调用 run 函数，并传入参数
         rdata = BiasAddr(account, mobile, name, key, db_path).run(True, vlp)
         return rdata
@@ -132,30 +133,30 @@ class MainWxInfo(BaseSubMainClass):
 
     def init_parses(self, parser):
         # 添加 'wx_info' 子命令解析器
-        parser.add_argument("-vlp", '--version_list_path', metavar="", type=str,
-                            help="(可选)微信版本偏移文件路径", default=VERSION_LIST_PATH)
+        parser.add_argument("-vlp", '--WX_OFFS_PATH', metavar="", type=str,
+                            help="(可选)微信版本偏移文件路径", default=WX_OFFS_PATH)
         parser.add_argument("-s", '--save_path', metavar="", type=str, help="(可选)保存路径【json文件】")
         return parser
 
     def run(self, args):
         print(f"[*] PyWxDump v{pywxdump.__version__}")
         # 读取微信各版本偏移
-        path = args.version_list_path
+        path = args.WX_OFFS_PATH
         save_path = args.save_path
-        version_list = json.load(open(path, "r", encoding="utf-8"))
-        result = read_info(version_list, True, save_path)  # 读取微信信息
+        WX_OFFS = json.load(open(path, "r", encoding="utf-8"))
+        result = get_wx_info(WX_OFFS, True, save_path)  # 读取微信信息
         return result
 
 
 class MainWxDbPath(BaseSubMainClass):
-    mode = "db_path"
+    mode = "wx_path"
     parser_kwargs = {"help": "获取微信文件夹路径"}
 
     def init_parses(self, parser):
         # 添加 'wx_db_path' 子命令解析器
-        parser.add_argument("-r", "--require_list", type=str,
+        parser.add_argument("-r", "--db_types", type=str,
                             help="(可选)需要的数据库名称(eg: -r MediaMSG;MicroMsg;FTSMSG;MSG;Sns;Emotion )",
-                            default="all", metavar="")
+                            default=None, metavar="")
         parser.add_argument("-wf", "--wx_files", type=str, help="(可选)'WeChat Files'路径", default=None,
                             metavar="")
         parser.add_argument("-id", "--wxid", type=str, help="(可选)wxid_,用于确认用户文件夹",
@@ -163,13 +164,14 @@ class MainWxDbPath(BaseSubMainClass):
         return parser
 
     def run(self, args):
+        print(f"[*] PyWxDump v{pywxdump.__version__}")
         # 从命令行参数获取值
-        require_list = args.require_list
+        db_types = args.db_types
         msg_dir = args.wx_files
         wxid = args.wxid
-
-        user_dirs = get_wechat_db(require_list, msg_dir, wxid, True)  # 获取微信数据库路径
-        return user_dirs
+        ret = get_wx_db(msg_dir=msg_dir, db_types=db_types, wxids=wxid)
+        for i in ret: print(i)
+        return ret
 
 
 class MainDecrypt(BaseSubMainClass):
@@ -210,7 +212,7 @@ class MainMerge(BaseSubMainClass):
     parser_kwargs = {"help": "[测试功能]合并微信数据库(MSG.db or MediaMSG.db)"}
 
     def init_parses(self, parser):
-        # 添加 'decrypt' 子命令解析器
+        # 添加 'merge' 子命令解析器
         parser.add_argument("-i", "--db_path", type=str, help="数据库路径(文件路径，使用英文[,]分割)", required=True,
                             metavar="")
         parser.add_argument("-o", "--out_path", type=str, default=os.path.join(os.getcwd(), "decrypted"),
@@ -242,7 +244,7 @@ class MainMerge(BaseSubMainClass):
             print(f"[+] 创建输出文件夹：{out_path}")
 
         print(f"[*] 合并中...（用时较久，耐心等待）")
-
+        dbpaths = [{"db_path": i} for i in dbpaths if os.path.exists(i)]  # 去除不存在的路径
         result = merge_db(dbpaths, out_path)
 
         print(f"[+] 合并完成：{result}")
@@ -254,219 +256,67 @@ class MainShowChatRecords(BaseSubMainClass):
     parser_kwargs = {"help": "聊天记录查看"}
 
     def init_parses(self, parser):
-        # 添加 'decrypt' 子命令解析器
-        parser.add_argument("-merge", "--merge_path", type=str, help="解密后的 merge_all.db 的路径", required=False,
-                            metavar="")
-
-        parser.add_argument("-msg", "--msg_path", type=str, help="解密后的 MSG.db 的路径", required=False,
-                            metavar="")
-        parser.add_argument("-micro", "--micro_path", type=str, help="解密后的 MicroMsg.db 的路径", required=False,
-                            metavar="")
-        parser.add_argument("-media", "--media_path", type=str, help="解密后的 MediaMSG.db 的路径", required=False,
-                            metavar="")
-
+        # 添加 'dbshow' 子命令解析器
+        parser.add_argument("-merge", "--merge_path", type=str, help="解密并合并后的 merge_all.db 的路径",
+                            required=False, metavar="")
         parser.add_argument("-wid", "--wx_path", type=str,
                             help="(可选)微信文件夹的路径（用于显示图片）", required=False,
                             metavar="")
         parser.add_argument("-myid", "--my_wxid", type=str, help="(可选)微信账号(本人微信id)", required=False,
-                            default="wxid_vzzcn5fevion22", metavar="")
+                            default="", metavar="")
         parser.add_argument("--online", action='store_true', help="(可选)是否在线查看(局域网查看)", required=False,
                             default=False)
+        # parser.add_argument("-k", "--key", type=str, help="(可选)密钥", required=False, metavar="")
         return parser
 
     def run(self, args):
         print(f"[*] PyWxDump v{pywxdump.__version__}")
         # (merge)和(msg_path,micro_path,media_path) 二选一
-        if not args.merge_path and not (args.msg_path and args.micro_path and args.media_path):
-            print("[-] 请输入数据库路径（[merge_path] or [msg_path, micro_path, media_path]）")
+        # if not args.merge_path and not (args.msg_path and args.micro_path and args.media_path):
+        #     print("[-] 请输入数据库路径（[merge_path] or [msg_path, micro_path, media_path]）")
+        #     return
+
+        # 目前仅能支持merge database
+        if not args.merge_path:
+            print("[-] 请输入数据库路径（[merge_path]）")
             return
 
         # 从命令行参数获取值
         merge_path = args.merge_path
-        if merge_path:
-            args.msg_path = merge_path
-            args.micro_path = merge_path
-            args.media_path = merge_path
 
         online = args.online
 
-        if not os.path.exists(args.msg_path) or not os.path.exists(args.micro_path) or not os.path.exists(
-                args.media_path):
+        if not os.path.exists(merge_path):
             print("[-] 输入数据库路径不存在")
             return
 
-        start_falsk(msg_path=args.msg_path, micro_path=args.micro_path, media_path=args.media_path,
-                    wx_path=args.wx_path, key="", my_wxid=args.my_wxid, online=online)
+        start_server(merge_path=merge_path, wx_path=args.wx_path, my_wxid=args.my_wxid, online=online)
 
 
 class MainExportChatRecords(BaseSubMainClass):
     mode = "export"
-    parser_kwargs = {"help": "聊天记录导出为html"}
+    parser_kwargs = {"help": "[已废弃]聊天记录导出为html"}
 
     def init_parses(self, parser):
-        # 添加 'decrypt' 子命令解析器
-        parser.add_argument("-u", "--username", type=str, help="微信账号(聊天对象账号)", required=True, metavar="")
-        parser.add_argument("-o", "--outpath", type=str, help="导出路径", required=True, metavar="")
-        parser.add_argument("-msg", "--msg_path", type=str, help="解密后的 MSG.db 的路径", required=True,
-                            metavar="")
-        parser.add_argument("-micro", "--micro_path", type=str, help="解密后的 MicroMsg.db 的路径", required=True,
-                            metavar="")
-        parser.add_argument("-media", "--media_path", type=str, help="解密后的 MediaMSG.db 的路径", required=True,
-                            metavar="")
-        parser.add_argument("-fs", "--filestorage_path", type=str,
-                            help="(可选)文件夹FileStorage的路径（用于显示图片）", required=False, metavar="")
-        parser.add_argument("-t", "--type", type=str, help="导出类型(可选:html,csv)", required=False,
-                            default="html", metavar="")
+        # 添加 'export' 子命令解析器
         return parser
 
     def run(self, args):
         print(f"[*] PyWxDump v{pywxdump.__version__}")
-        # 从命令行参数获取值
-        t = args.type
-
-        if t == "csv":
-            try:
-                code, ret = export_csv(args.username, args.outpath, args.msg_path, page_size=10000000)
-                if not code:
-                    print(ret)
-                    return
-                print(f"[+] {ret}")
-                return
-            except Exception as e:
-                print(e)
-                print("[-] 导出失败")
-                return
-        elif t == "html":
-            try:
-                from flask import Flask, request, jsonify, render_template, g
-                import logging
-            except Exception as e:
-                print(e)
-                print("[-] 请安装flask( pip install flask)")
-                return
-
-            if not os.path.exists(args.msg_path) or not os.path.exists(args.micro_path) or not os.path.exists(
-                    args.media_path):
-                print(os.path.exists(args.msg_path), os.path.exists(args.micro_path), os.path.exists(args.media_path))
-                print("[-] 输入数据库路径不存在")
-                return
-
-            if not os.path.exists(args.outpath):
-                os.makedirs(args.outpath)
-                print(f"[+] 创建输出文件夹：{args.outpath}")
-
-            export(args.username, args.outpath, args.msg_path, args.micro_path, args.media_path, args.filestorage_path)
-            print(f"[+] 导出成功{args.outpath}")
-        else:
-            print("[-] 未知的导出类型")
-            return
+        print("[+] export命令已废弃，请使用ui命令[wxdump ui]或api命令[wxdump api]启动服务")
 
 
 class MainAll(BaseSubMainClass):
     mode = "all"
-    parser_kwargs = {"help": "获取微信信息，解密微信数据库，查看聊天记录"}
+    parser_kwargs = {"help": "[已废弃]获取微信信息，解密微信数据库，查看聊天记录"}
 
     def init_parses(self, parser):
         # 添加 'all' 子命令解析器
-        parser.add_argument("-s", '--save_path', metavar="", type=str, help="(可选)wx_info保存路径【json文件】")
-        parser.add_argument("--online", action='store_true', help="(可选)是否在线查看(局域网查看)", default=False)
         return parser
 
     def run(self, args):
         print(f"[*] PyWxDump v{pywxdump.__version__}")
-        # 获取微信信息
-        save_path = args.save_path
-        online = args.online
-        WxInfo = read_info(VERSION_LIST, True, save_path)
-        if isinstance(WxInfo, str):  # 如果返回的是字符串，则表示出错
-            return
-        for user in WxInfo:
-            key = user.get("key", "")
-            if not key:
-                print("[-] 未获取到密钥")
-                return
-            wxid = user.get("wxid", None)
-            filePath = user.get("filePath", None)
-
-            WxDbPath = get_wechat_db('all', None, wxid=wxid, is_logging=True)  # 获取微信数据库路径
-            if isinstance(WxDbPath, str):  # 如果返回的是字符串，则表示出错
-                print(WxDbPath)
-                return
-            wxdbpaths = [path for user_dir in WxDbPath.values() for paths in user_dir.values() for path in paths]
-            if len(wxdbpaths) == 0:
-                print("[-] 未获取到数据库路径")
-                return
-
-            wxdbpaths = [i for i in wxdbpaths if "Backup.db" not in i and "xInfo.db" not in i]  # 过滤掉无需解密的数据库
-            wxdbpaths = [i for i in wxdbpaths if "MicroMsg" in i or "MediaMSG" in i or r"Multi\MSG" in i]  # 过滤掉无需解密的数据库
-            wxdblen = len(wxdbpaths)
-            print(f"[+] 共发现 {wxdblen} 个微信数据库")
-            print("=" * 32)
-
-            decrypted_path = os.path.join(os.getcwd(), "decrypted")
-            print(f"[*] 解密后文件夹：{decrypted_path} ")
-            print(f"[*] 解密中...（用时较久，耐心等待）")
-
-            # 判断out_path是否为空目录
-            if os.path.exists(decrypted_path) and os.listdir(decrypted_path):
-                isdel = input(f"[*] 输出文件夹不为空({decrypted_path})\n    是否删除?(y/n):")
-                if isdel.lower() == 'y' or isdel.lower() == 'yes':
-                    for root, dirs, files in os.walk(decrypted_path, topdown=False):
-                        for name in files:
-                            os.remove(os.path.join(root, name))
-                        for name in dirs:
-                            os.rmdir(os.path.join(root, name))
-
-            out_path = os.path.join(decrypted_path, wxid) if wxid else decrypted_path
-            if not os.path.exists(out_path):
-                os.makedirs(out_path)
-
-            # 调用 decrypt 函数，并传入参数   # 解密
-            code, ret = batch_decrypt(key, wxdbpaths, out_path, False)
-
-            if not code:
-                print(ret)
-                return
-            print("[+] 解密完成")
-            print("-" * 32)
-            errors = []
-            out_dbs = []
-            for code1, ret1 in ret:
-                if code1 == False:
-                    errors.append(ret1)
-                else:
-                    print(
-                        f'[+] success "{os.path.relpath(ret1[0], os.path.commonprefix(wxdbpaths))}" -> "{os.path.relpath(ret1[1], os.getcwd())}"')
-                    out_dbs.append(ret1[1])
-            if len(errors) > 0:
-                print("-" * 32)
-                print(
-                    "[-] " + f"警告：共 {len(errors)} 个文件未解密(可能原因:非当前登录用户数据库;非加密数据库),详见{out_path}下‘未解密.txt’;")
-            # print("; ".join([f'"{wxdbpaths[i]}"' for i in errors]))
-            with open(os.path.join(out_path, "未解密.txt"), "w", encoding="utf-8") as f:
-                f.write("\n".join([f'{i}' for i in errors]))
-            print("=" * 32)
-
-            if len(out_dbs) <= 0:
-                print("[-] 未获取到解密后的数据库路径")
-                return
-
-            parpare_merge_db_path = [i for i in out_dbs if "de_MicroMsg" in i or "de_MediaMSG" in i or "de_MSG" in i]
-            # 合并所有的数据库
-            print(f"[*] 合并数据库中...（用时较久，耐心等待）")
-            merge_save_path = merge_db(parpare_merge_db_path, os.path.join(out_path, "merge_all.db"))
-            time.sleep(1)
-            print(f"[+] 合并完成：{merge_save_path}")
-            print("=" * 32)
-            # # 查看聊天记录
-            args.merge_path = merge_save_path
-            args.msg_path = merge_save_path
-            args.micro_path = merge_save_path
-            args.media_path = merge_save_path
-            args.wx_path = filePath
-            args.my_wxid = wxid
-            args.online = online
-            MainShowChatRecords().run(args)
+        print("[+] all命令已废弃，请使用ui命令[wxdump ui]或api命令[wxdump api]启动服务")
 
 
 class MainUi(BaseSubMainClass):
@@ -478,6 +328,8 @@ class MainUi(BaseSubMainClass):
         parser.add_argument("-p", '--port', metavar="", type=int, help="(可选)端口号", default=5000)
         parser.add_argument("--online", help="(可选)是否在线查看(局域网查看)", default=False, action='store_true')
         parser.add_argument("--debug", help="(可选)是否开启debug模式", default=False, action='store_true')
+        parser.add_argument("--noOpenBrowser", dest='isOpenBrowser', default=True, action='store_false',
+                            help="(可选)用于禁用自动打开浏览器")
         return parser
 
     def run(self, args):
@@ -486,13 +338,14 @@ class MainUi(BaseSubMainClass):
         online = args.online
         port = args.port
         debug = args.debug
+        isopenBrowser = args.isOpenBrowser
 
-        start_falsk(port=port, online=online, debug=debug)
+        start_server(port=port, online=online, debug=debug, isopenBrowser=isopenBrowser)
 
 
 class MainApi(BaseSubMainClass):
     mode = "api"
-    parser_kwargs = {"help": "启动api"}
+    parser_kwargs = {"help": "启动api，不打开浏览器"}
 
     def init_parses(self, parser):
         # 添加 'api' 子命令解析器
@@ -508,7 +361,7 @@ class MainApi(BaseSubMainClass):
         port = args.port
         debug = args.debug
 
-        start_falsk(port=port, online=online, debug=debug, isopenBrowser=False)
+        start_server(port=port, online=online, debug=debug, isopenBrowser=False)
 
 
 def console_run():

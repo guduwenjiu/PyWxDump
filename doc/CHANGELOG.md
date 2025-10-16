@@ -1,5 +1,561 @@
-## v2.4.62.(待发布)
+## v3.1.46.(待发布)
 
+- UPDATE CHANGELOG.md
+
+## v3.1.45
+
+- add wx 3.9.12.51
+- UPDATE CHANGELOG.md
+- fix gen_change_log.py
+
+## v3.1.44
+
+- fix #176
+- fix #178
+- update #178
+
+## v3.1.43
+
+- add 3.9.12.45
+- add wx 3.9.12.37
+
+## v3.1.42
+
+- add wx 3.9.12.37
+
+## v3.1.41, tag: v3.1.40, tag: v3.1.39
+
+- 新增消息分类 (#162)
+- fix 修改flask启动方式
+- add wx 3.9.12.31
+- UPDATE CHANGELOG.md
+- Merge remote-tracking branch 'origin'
+
+## v3.1.38
+
+- fix
+- 实时消息增加中文路径支持
+- UPDATE CHANGELOG.md
+
+## v3.1.37
+
+- fix
+- 完善收藏的类型转换体系
+- fix tag查询结果去重
+- modify log fmt
+
+## v3.1.36
+
+- fix #143
+- UPDATE CHANGELOG.md
+
+## v3.1.35
+
+- fix
+- 增加api文档说明
+- UPDATE CHANGELOG.md
+
+## v3.1.34
+
+- add 注释
+- fix CE获取基址.md
+- UPDATE CHANGELOG.md
+- UPDATE WXOFFS 3.9.12.17
+
+## v3.1.33
+
+- fix
+- 群聊增加群成员显示
+- 计划增加自动推送到gitee
+- add wx 3.9.12.15
+- UPDATE CHANGELOG.md
+- update UserGuide.md
+
+## v3.1.32
+
+- 修改注释
+- 群聊增加群成员显示
+- M CE获取基址.md
+- UPDATE CHANGELOG.md
+
+## v3.1.31
+
+- fix 联系人搜索bug
+
+## v3.1.30
+
+- fix
+- add log to file
+
+## v3.1.29
+
+- fix
+- fix 群聊list
+
+## v3.1.28
+
+- fix #125
+- UPDATE CHANGELOG.md
+
+## v3.1.27
+
+- fix
+- update test
+- UPDATE CHANGELOG.md
+- fix DIl load failed while importing pydantic_core:
+
+## v3.1.26
+
+- fix dbshow #124
+
+## v3.1.25
+
+- fix
+- UPDATE CHANGELOG.md
+
+## v3.1.24
+
+- fix 部分图片无法读取
+- get_msgs 允许多个wxid
+- UPDATE CHANGELOG.md
+
+## v3.1.23
+
+- fix
+- import 优化
+- rename core_db_type
+- fix import时候无法自动处理data
+
+## v3.1.22
+
+- fix 单用户使用上次数据报错问题
+- UPDATE CHANGELOG.md
+
+## v3.1.21
+
+- fix
+- fix #123
+- fix 无限递归问题
+- update README.md
+- UPDATE CHANGELOG.md
+
+## v3.1.20
+
+- fix
+- 增加注释说明
+- add Sns
+- Media_add_index
+- add export html
+- UPDATE CHANGELOG.md
+- fix build exe error
+- 增加注释，增加自定义实时合并数据库路径
+- 该flask为fastapi，速度更快
+- fix and add export html
+- 加快web页面加载数据，重置部分api，调整server为fastapi
+
+## v3.1.18
+
+- fix
+- 分离检查数据库中表是否存在，在每个函数运行前检查表是否存在
+
+## v3.1.17
+
+- UPDATE CHANGELOG.md
+- (分享)卡片式链接 增加extra，包含更多数据
+
+## v3.1.16
+
+- 新增个性签名词云
+- fix export
+- UPDATE CHANGELOG.md
+
+## v3.1.15
+
+- fix
+- fix build error
+
+## v3.1.14
+
+- fix
+- 添加注释
+- 新标签页打开链接
+- 清理2.0的ui文件
+- 实时消息增加工具路径设置
+- fix bug；略微调整UI
+- UPDATE CHANGELOG.md
+
+## v3.1.13
+
+- fix
+- UPDATE CHANGELOG.md
+
+## v3.1.12
+
+- UPDATE CHANGELOG.md
+- fix 部分api请求失败情况下，不会噶了
+
+## v3.1.11
+
+- fix
+
+## v3.1.10
+
+- 增加了一些数据显示
+- 增加聊天情况热力图
+- UPDATE CHANGELOG.md
+
+## v3.1.9
+
+- UPDATE CHANGELOG.md
+- fix 更换选项，无法自动启用新的数据库
+- 调整颜色，但是还是很丑，打算添加自定义颜色进去
+
+## v3.1.8
+
+- fix #114
+- UPDATE CHANGELOG.md
+
+## v3.1.7
+
+- fix
+- 增加接收、发送消息数量的图表显示
+- UPDATE CHANGELOG.md
+- 增加聊天联系人top10 系列，点击直接查看
+
+## v3.1.6
+
+- 优化界面
+- 日聊天记录数量可用
+- fix 引用图片显示错误的问题
+
+## v3.1.5
+
+- fix
+- 格式化代码
+- UPDATE CHANGELOG.md
+
+## v3.1.4
+
+- fix cli
+
+## v3.1.3
+
+- fix 上下文出错的bug
+- UPDATE CHANGELOG.md
+
+## v3.1.2
+
+- 显示更直观
+
+## v3.1.1
+
+- 格式化
+- 显示更直观
+- 增加日志管理
+- 增加表情显示
+- 多线程报错问题
+- fix 实时消息
+- 修复了一下bug
+- 同步设置web的标签
+- 设置详细信息的显示格式
+- 增加rjson非0的堆栈日志
+- 为数据库添加索引，加快查询速度
+- UPDATE CHANGELOG.md
+- add Session 数据的实时导出
+- 会话查询，取消显示”订阅号“这个wxid
+- fix 合并数据库，以及部分专业工具的显示问题
+- get_session_list 根据时间排序更加合理
+- version_list.josn 重命名为 WX_OFFS.json
+
+## v3.1.0
+
+- fix
+- add wx3.9.11.25
+- UPDATE CHANGELOG.md
+- 3.1.0,很多更改丢失，重新恢复的文件
+
+## v3.0.42
+
+- 增加容错
+- fix 部分图片无法读取
+- update README
+- fix 多重引用消息显示错误
+- Update version_list.json (#110)
+- Merge branch 'master' of github.com:xaoyaoo/PyWxDump
+
+## v3.0.41
+
+- 格式化代码
+- 加快wxinfo获取
+- 加速merge_db合并速度
+- 加快wxinfo获取，速度提升10%
+- UPDATE CHANGELOG.md
+- 加快运行速度，但是可能不支持win32
+- 加快wxinfo获取，速度再次提升40%
+- 加快wxinfo获取，提速30% 感谢【鱼先生啊】
+
+## v3.0.40
+
+- fix
+- fix 图片读取错误
+- 加速实时消息处理速度
+- UPDATE CHANGELOG.md
+- fix real time msg 中文路径报错
+- fix LastReadedCreateTime 容错
+
+## v3.0.37
+
+- 增加公众号消息显示
+- fix and add
+- add (分享)卡片式链接 解析
+- UPDATE CHANGELOG.md
+- release_new_version
+
+## v3.0.36
+
+- fix
+- Update README.md
+- add wx 3.9.11.19
+- UPDATE CHANGELOG.md
+
+## v3.0.35
+
+- fix 部分表情无法显示
+
+## v3.0.34
+
+- fix
+- (49, 2000): "转账",
+- UPDATE CHANGELOG.md
+
+## v3.0.33
+
+- fix
+- UPDATE CHANGELOG.md
+
+## v3.0.32
+
+- 使用本地设置，增加选项
+
+## v3.0.31
+
+- fix bug
+- UPDATE CHANGELOG.md
+
+## v3.0.30
+
+- 位置显示支持
+- 消息类型统一处理
+- 转账消息更加明确
+- 增加更多消息类型的说明
+- UPDATE CHANGELOG.md
+- get_BytesExtra 数据类型增加其他处理
+
+## v3.0.29
+
+- wx 3.9.11.17支持
+- user_list_by_label
+- UPDATE CHANGELOG.md
+
+## v3.0.28
+
+- 修复打包问题
+- 增加联系人标签显示
+- UPDATE CHANGELOG.md
+- get info add decorator info_error
+
+## v3.0.27
+
+- fix
+- 增加容错
+- fix 浏览器打开参数
+
+## v3.0.26
+
+- fix
+- fix test
+
+## v3.0.25
+
+- fix
+- fix Favorite
+- fix wx 3.9.10.27
+- feat: 数据库合并与查询优化 (#97)
+- fix: fix bug on cli dbshow command (#96)
+- Merge branch 'master' of github.com:xaoyaoo/PyWxDump
+
+## v3.0.24
+
+- 增加说明
+- 增加收藏夹的库
+- UPDATE CHANGELOG.md
+
+## v3.0.23
+
+- fix
+- 增加注释
+- 更新DOC
+- 增加注释方便使用
+- 增加收藏数据库解析
+- 准备添加收藏数据库解析
+
+## v3.0.22
+
+- fix
+- 修改获取name的逻辑
+- 增加依赖库pandas
+- fix dbshow 命令
+- UPDATE CHANGELOG.md
+
+## v3.0.21
+
+- fix
+- fix 增加容错 #93
+
+## v3.0.20
+
+- fix 合并实时数据库的函数在路径名中有中文时会报错 #92
+
+## v3.0.19
+
+- fix
+- 更新FAQ
+- 加快info的获取速度
+- UPDATE CHANGELOG.md
+- 优化代码，增加name获取的容错 #94
+
+## v3.0.18
+
+- 修复无法自动解密（解密报错的问题）
+- UPDATE CHANGELOG.md
+
+## v3.0.17
+
+- 修复无法自动解密（解密报错的问题）
+
+## v3.0.16
+
+- 更新文档
+- 格式化代码
+- 优化命令说明
+- 更新说明文件
+- 废弃命令增加说明
+- 增加合并全部数据库的命令
+- UPDATE CHANGELOG.md
+
+## v3.0.15
+
+- 增加合并数据库的容错
+
+## v3.0.14
+
+- fix auto无法使用的问题。
+
+## v3.0.13
+
+- test 聊天记录分析
+- fix 无法auto无法使用的问题。
+
+## v3.0.12
+
+- 调整显示样式
+- 增加数据展示的包
+- 更新 FAQ.md
+- 更新 UserGuide.md
+- UPDATE CHANGELOG.md
+
+## v3.0.11
+
+- fix
+- 清理代码
+- 清理微信存储空间核心代码
+- 更新 README_CN.md
+- 更新 README_EN.md
+- 清理已经废弃的代码（可能会存在有用代码被清除）
+
+## v3.0.10
+
+- fix
+- fix 部分错误
+- 删除部分命令行不可用命令
+
+## v3.0.8
+
+- fix
+
+## v3.0.7
+
+- 重构导出
+- 重构导出csv
+- 重构导出json
+- 增加获取群备注的功能
+- 增加数据库查询失败的容错
+- UPDATE CHANGELOG.md
+- OpenIMContact表中不到的问题
+
+## v3.0.6
+
+- fix
+
+## v3.0.5
+
+- fix
+- fix 数据库合并的问题
+- UI 偏移地址获取 fix
+- UPDATE README.md
+
+## v3.0.4
+
+- fix
+
+## v3.0.3
+
+- fix
+
+## v3.0.2
+
+- fix
+
+## v3.0.1
+
+- fix
+- 优化代码
+- 增加注释
+- UPDATE README.md
+- UPDATE CHANGELOG.md
+
+## v3.0.0
+
+- 加速访问，增加容错merge
+- 重构大部分API，响应速度翻倍
+- UPDATE CHANGELOG.md
+- 加快数据库访问速度，同时独立处理每一个数据库
+- 增加新的使用方法，加快访问速度，合并相似的功能
+
+## v2.4.71
+
+- fix
+- 完善注释
+- 修改数据库匹配规则
+- 增加3.9.10.19支持
+- fix 图片优先显示清晰版本
+- 增加UI选项是否自动打开浏览器
+- UPDATE README.md
+- 读取ExtraBuf（联系人表）
+- fix 部分情况下视频不能正常显示
+- UPDATE CHANGELOG.md
+- MSG数量超过10个无法获取最新数据的bug
+
+## v2.4.70
+
+- 增加对引用消息的解析
+- Update README.md
+- UPDATE CHANGELOG.md
+- 读取群聊数据,主要为 wxid，以及对应昵称
+
+## v2.4.62
+
+- 增加对引用消息的解析
 - UPDATE CHANGELOG.md
 
 ## v2.4.61
@@ -13,7 +569,7 @@
 - 优化 decryption.py
 - UPDATE CHANGELOG.md
 - 数据库连接方式改为共用连接，降低时间开销
-- (backup/master) 添加编码# -*- coding:utf-8 -*-
+- 添加编码# -*- coding:utf-8 -*-
 
 ## v2.4.60
 

@@ -58,7 +58,7 @@ QQ GROUP：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.xaoy
 
 #### 2.4 Other functions
 
-* (1) Added a minimalist version of pywxdumpmini, which provides only the ability to obtain database keys and database locations
+* (1) Added a minimalist version of [pywxdumpmini](https://github.com/xaoyaoo/pywxdumpmini), which provides only the ability to obtain database keys and database locations
 * (2) Support multiple WeChat opening scenarios, obtain multiple user information, etc.
 
 **Utilize the scene**
@@ -71,13 +71,12 @@ QQ GROUP：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.xaoy
 ## 3. Update plan
 
 * 1.Analyze chat logs of each person and generate word clouds.
-* 2.Analyze the number of chats per person per day and generate a line chart (day-number of chats)
-* 3.Analyze the monthly and annual chat volume of different people and generate a line chart
-* 4.Generate annual visualization reports
+* ~~2.Analyze the number of chats per person per day and generate a line chart (day-number of chats)~~
+* ~~3.Analyze the monthly and annual chat volume of different people and generate a line chart~~
+* ~~4.Generate annual visualization reports~~
 * 8.Increase support for enterprise WeChat
-* 11.Back up chat history and restore it to WeChat
 * 12.Viewing and backing up of the circle of friends
-* 13.Clean up WeChat storage space and reduce the space occupied by WeChat (hopefully by selecting a person or group and finding out the media files involved in the chat logs of this group, such as pictures, videos, files, voice recordings, etc., and selectively (such as time periods) or batch-wise clearing them from the computer's cache by group conversation.)
+* ~~13.Clean up WeChat storage space and reduce the space occupied by WeChat (hopefully by selecting a person or group and finding out the media files involved in the chat logs of this group, such as pictures, videos, files, voice recordings, etc., and selectively (such as time periods) or batch-wise clearing them from the computer's cache by group conversation.)~~
 * 14.Automatically send messages to specified people through UI control
 
 ## 4. Other
@@ -86,7 +85,7 @@ QQ GROUP：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.xaoy
 
 * Project address: https://github.com/xaoyaoo/PyWxDump
 * Currently tested only under Windows, there may be issues under mac and Linux.
-* If you find any missing or incorrect information, bugs, or suggestions for improvement in the [version_list.json](https://github.com/xaoyaoo/PyWxDump/tree/master/pywxdump/version_list.json), please submit an issue on GitHub.
+* If you find any missing or incorrect information, bugs, or suggestions for improvement in the [WX_OFFS.json](https://github.com/xaoyaoo/PyWxDump/tree/master/pywxdump/WX_OFFS.json), please submit an issue on GitHub.
 * For common issues, please refer to [FAQ](https://github.com/xaoyaoo/PyWxDump/tree/master/doc/FAQ.md), and for the update log, please refer to [CHANGELOG](https://github.com/xaoyaoo/PyWxDump/tree/master/doc/CHANGELOG.md)
 * Web UI repository location [wxdump_web](https://github.com/xaoyaoo/wxdump_web )
 * If you are interested in the implementation principle of wxdump, please pay attention to the Official Accounts: `逍遥之芯`, reply: `原理` to get the principle analysis.
@@ -192,4 +191,8 @@ QQ GROUP：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.xaoy
 # Ⅴ. Acknowledgments
 
 [![PyWxDump CONTRIBUTORS](https://contrib.rocks/image?repo=xaoyaoo/PyWxDump)](https://github.com/xaoyaoo/PyWxDump/graphs/contributors)[![UI CONTRIBUTORS](https://contrib.rocks/image?repo=xaoyaoo/wxdump_web)](https://github.com/xaoyaoo/wxdump_web/graphs/contributors)
+
+otherContributors:
+
+[643104191](https://github.com/643104191) (add [ctypes_utils](https://github.com/xaoyaoo/PyWxDump/blob/9e3e4cb5aec2b9b445c8283d61c58863f4129c6e/pywxdump/wx_info/ctypes_utils.py), Accelerated the acquisition of wxinfo; [9e3e4cb](https://github.com/xaoyaoo/PyWxDump/commit/9e3e4cb5aec2b9b445c8283d61c58863f4129c6e))
 

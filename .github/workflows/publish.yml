@@ -45,6 +45,7 @@ jobs:
           Compress-Archive -Path wxdump_web -DestinationPath wxdump_web.zip
           Compress-Archive -Path PyWxDump -DestinationPath PyWxDump.zip
           cd wxdump_web
+          npm list -g
           npm install
           npm run build
 
@@ -56,22 +57,22 @@ jobs:
           ls -l PyWxDump/pywxdump/ui/web
           cd PyWxDump
 
-      - name: Build Export UI # 构建导出的 Web UI
-        run: |
-          cd ..
-          cd wxdump_web
-          cp src/main.ts src/t.ts
-          cp src/main.ts.export src/main.ts
-          npm install
-          npm run build
-
-      - name: copy Export UI and Export UI to pywxdump/ui/web and pywxdump/ui/export
-        run: |
-          cd ..
-          ls -l wxdump_web/dist
-          cp -r wxdump_web/dist PyWxDump/pywxdump/ui/export
-          ls -l PyWxDump/pywxdump/ui/export
-          cd PyWxDump
+#      - name: Build Export UI # 构建导出的 Web UI
+#        run: |
+#          cd ..
+#          cd wxdump_web
+#          cp src/main.ts src/t.ts
+#          cp src/main.ts.export src/main.ts
+#          npm install
+#          npm run build
+#
+#      - name: copy Export UI and Export UI to pywxdump/ui/web and pywxdump/ui/export
+#        run: |
+#          cd ..
+#          ls -l wxdump_web/dist
+#          cp -r wxdump_web/dist PyWxDump/pywxdump/ui/export
+#          ls -l PyWxDump/pywxdump/ui/export
+#          cd PyWxDump
 
       - name: Build package # 构建包
         run: |
@@ -81,6 +82,8 @@ jobs:
       - name: Generate File pywxdump.spec # 生成 pywxdump.spec 文件
         run: |
           python tests/build_exe.py
+          ls 
+          ls dist
           cat dist/pywxdump.spec
 
       - name: Build Executable

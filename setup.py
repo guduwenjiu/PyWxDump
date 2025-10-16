@@ -20,13 +20,17 @@ install_requires = [
     "silk-python",
     "pyaudio",
     "requests",
-    "pillow",
     "pyahocorasick",
-    "flask",
     "lz4",
     "blackboxprotobuf",
     "lxml",
-    "flask_cors",
+    "dbutils",
+
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+
+    # "pillow",
 ]
 
 setup(
@@ -40,24 +44,29 @@ setup(
     url="https://github.com/xaoyaoo/PyWxDump",
     license='MIT',
 
-    packages=['pywxdump', 'pywxdump.ui', 'pywxdump.wx_info', 'pywxdump.analyzer', 'pywxdump.api'],
+    # packages=find_packages(exclude=[]),
+    packages=['pywxdump', 'pywxdump.ui', 'pywxdump.wx_core', 'pywxdump.wx_core.utils', 'pywxdump.analyzer',
+              'pywxdump.api', 'pywxdump.api.export', 'pywxdump.db', 'pywxdump.db.utils'],
     package_dir={'pywxdump': 'pywxdump',
-                 'pywxdump.wx_info': 'pywxdump/wx_info',
+                 'pywxdump.wx_core': 'pywxdump/wx_core',
+                 'pywxdump.wx_core.utils': 'pywxdump/wx_core/utils',
                  'pywxdump.analyzer': 'pywxdump/analyzer',
                  'pywxdump.ui': 'pywxdump/ui',
                  'pywxdump.api': 'pywxdump/api',
+                 'pywxdump.api.export': 'pywxdump/api/export',
+                 'pywxdump.db': 'pywxdump/db',
+                 'pywxdump.db.utils': 'pywxdump/db/utils'
                  },
-
+    # include_package_data=True,
     package_data={
-        'pywxdump': ['version_list.json', 'ui/templates/*', 'ui/web/*', 'ui/web/assets/*', 'wx_info/tools/*',
-                     "ui/export/*", "ui/export/assets/*", "ui/export/assets/css/*", "ui/export/assets/js/*",
+        'pywxdump': ['WX_OFFS.json', 'ui/web/*', 'ui/web/assets/*', 'wx_core/tools/*',
                      ]
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6, <4',
+    python_requires='>=3.8, <4',
     install_requires=install_requires,
     entry_points={
         'console_scripts': [

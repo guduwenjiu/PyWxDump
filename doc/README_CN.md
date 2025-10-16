@@ -44,7 +44,7 @@ QQ交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 * （4）合并多种类型数据库，方便统一查看
 
 #### 2.2 扩展功能
-
+[README_EN.md](README_EN.md)
 * （1）通过web查看聊天记录
 * （2）支持导出聊天记录为html、csv,备份微信聊天记录
 * （3）远程查看微信聊天记录（必须网络可达，例如局域网）
@@ -57,7 +57,7 @@ QQ交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 
 #### 2.4 其他功能
 
-* （1）增加极简版pywxdumpmini，只提供获取数据库密钥以及数据库位置的功能
+* （1）增加极简版[pywxdumpmini](https://github.com/xaoyaoo/pywxdumpmini)，只提供获取数据库密钥以及数据库位置的功能
 * （2）支持微信多开场景，获取多用户信息等
 
 **利用场景**
@@ -70,13 +70,12 @@ QQ交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 ## 3. 更新计划
 
 * 1.每个人聊天记录分析，生成词云。
-* 2.分析每个人每天的聊天数量，生成折线图（天-聊天数量）
-* 3.分析不同的人的月聊天数量，年聊天数量，生成折线图
-* 4.生成年度可视化报告
+* ~~2.分析每个人每天的聊天数量，生成折线图（天-聊天数量）~~
+* ~~3.分析不同的人的月聊天数量，年聊天数量，生成折线图~~
+* ~~4.生成年度可视化报~~
 * 8.增加企业微信的支持
-* 11.备份后的聊天记录，恢复到微信中
 * 12.朋友圈的查看与备份
-* 13.微信存储空间清理，减少微信占用空间(希望能通过选择某个人或群，把这群里的聊天记录中涉及的图片、视频、文件、语音等的媒体文件找出来，以群对话为单位有选择性的（比如时间段）或按群会话批量从电脑的缓存中清除。)
+* ~~13.微信存储空间清理，减少微信占用空间(能通过选择某个人或群，把这群里的聊天记录中涉及的图片、视频、文件、语音等的媒体文件找出来，以群对话为单位有选择性的（比如时间段）或按群会话批量从电脑的缓存中清除。)~~
 * 14.通过UI控制，自动给指定人发送消息
 
 ## 4. 其他
@@ -85,11 +84,12 @@ QQ交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 
 * 项目地址：https://github.com/xaoyaoo/PyWxDump
 * 目前只在windows下测试过，mac、linux下可能会存在问题。
-* 如发现[version_list.json](https://github.com/xaoyaoo/PyWxDump/tree/master/pywxdump/version_list.json)缺失或错误、bug，有改进意见、想要新增功能, 请提交[issues](https://github.com/xaoyaoo/PyWxDump/issues).
+* 如发现[WX_OFFS.json](https://github.com/xaoyaoo/PyWxDump/tree/master/pywxdump/WX_OFFS.json)缺失或错误、bug，有改进意见、想要新增功能, 请提交[issues](https://github.com/xaoyaoo/PyWxDump/issues).
 * 常见问题请参考[FAQ](https://github.com/xaoyaoo/PyWxDump/tree/master/doc/FAQ.md)，更新日志请参考[CHANGELOG](https://github.com/xaoyaoo/PyWxDump/tree/master/doc/CHANGELOG.md)
 * Web UI的仓库位置 [wxdump_web](https://github.com/xaoyaoo/wxdump_web)
 * 如果对wxdump实现原理感兴趣，请关注公众号：`逍遥之芯`，回复：`原理` 获取原理解析。
 * [:sparkling\_heart: Support Me](https://github.com/xaoyaoo/xaoyaoo/blob/main/donate.md)
+* 关于系统支持版本：Windows 10 64位及以上、 python 3.8及以上，其他版本遇到错误需要自行解决
 
 ## 5. Star History
 
@@ -153,4 +153,8 @@ QQ交流群：[276392799](https://s.xaoyo.top/gOLUDl) or [276392799](https://s.x
 # 四、致谢
 
 [![PyWxDump 贡献者](https://contrib.rocks/image?repo=xaoyaoo/PyWxDump)](https://github.com/xaoyaoo/PyWxDump/graphs/contributors)[![UI 贡献者](https://contrib.rocks/image?repo=xaoyaoo/wxdump_web)](https://github.com/xaoyaoo/wxdump_web/graphs/contributors)
+
+其他贡献者：
+
+[643104191](https://github.com/643104191) (提供了[ctypes_utils](https://github.com/xaoyaoo/PyWxDump/blob/9e3e4cb5aec2b9b445c8283d61c58863f4129c6e/pywxdump/wx_info/ctypes_utils.py),加快了wxinfo获取; [9e3e4cb](https://github.com/xaoyaoo/PyWxDump/commit/9e3e4cb5aec2b9b445c8283d61c58863f4129c6e))
 
